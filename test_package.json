@@ -1,0 +1,139 @@
+// test_package.json
+
+describe('React app tests', () => {
+  beforeEach(() => {
+    // Mock the API response for user data
+    cy.intercept('GET', '/api/users/1', {
+      delay: 1000, // Simulate network delay
+      statusCode: 200,
+      body: {
+        id: 1,
+        name: 'Leanne Graham',
+      },
+    }).as('getUser');
+
+    // Visit the app
+    cy.visit('/');
+  });
+
+  it('displays a "Loading..." message while user information is being fetched', () => {
+    // Assert that the "Loading..." message is displayed
+    cy.get('div').contains('Loading...').should('be.visible');
+  });
+
+  it('displays the correct user information', () => {
+    // Wait for the API call to complete
+    cy.wait('@getUser');
+
+    // Assert that the correct user information is displayed
+    cy.get('p').contains('Name: Leanne Graham').should('be.visible');
+  });
+});// cypress/integration/tests/test.spec.js
+
+describe('React app tests', () => {
+  beforeEach(() => {
+    // Intercept API call and mock response
+    cy.intercept('GET', '/api/users/1', {
+      statusCode: 200,
+      body: {
+        id: 1,
+        name: 'Leanne Graham',
+      },
+    }).as('getUser');
+
+    // Visit the app
+    cy.visit('/');
+  });
+
+  it('displays a "Loading..." message while user information is being fetched', () => {
+    // Assert that the "Loading..." message is displayed
+    cy.get('div').contains('Loading...').should('be.visible');
+  });
+
+  it('displays the correct user information', () => {
+    // Wait for the API call to complete
+    cy.wait('@getUser');
+
+    // Assert that the correct user information is displayed
+    cy.get('p').contains('Name: Leanne Graham').should('be.visible');
+  });
+});
+// test_package.json
+
+describe('React app tests', () => {
+  beforeEach(() => {
+    // Intercept API call and mock response
+    cy.intercept('GET', '/api/users/1', {
+      statusCode: 200,
+      body: {
+        id: 1,
+        name: 'Leanne Graham',
+      },
+    }).as('getUser');
+
+    // Visit the app
+    cy.visit('/');
+  });
+
+  it('displays a "Loading..." message while user information is being fetched', () => {
+    // Assert that the "Loading..." message is displayed
+    cy.get('div')
+      .contains('Loading...')
+      .should('be.visible', { timeout: 6000 }); // Increased timeout
+  });
+
+  it('displays the correct user information', () => {
+    // Wait for the API call to complete
+    cy.wait('@getUser');
+
+    // Assert that the correct user information is displayed
+    cy.get('p')
+      .contains('Name: Leanne Graham')
+      .should('be.visible', { timeout: 6000 }); // Increased timeout
+  });
+});
+// Append this to your existing Jest test file
+
+import React from 'react';
+import { render, screen, waitFor } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import App from '../App'; // Adjust the import path to your App component
+import fetchMock from 'jest-fetch-mock';
+
+fetchMock.enableMocks();
+
+describe('React app tests', () => {
+  beforeEach(() => {
+    fetch.resetMocks();
+  });
+
+  it('displays a "Loading..." message while user information is being fetched', async () => {
+    // Mock the API response with a delay
+    fetch.mockResponseOnce(
+      () =>
+        new Promise((resolve) =>
+          setTimeout(() => resolve(JSON.stringify({ id: 1, name: 'Leanne Graham' })), 1000)
+        )
+    );
+
+    // Render the component
+    render(<App />);
+
+    // Assert that the "Loading..." message is displayed
+    expect(screen.getByText('Loading...')).toBeInTheDocument();
+
+    // Wait for the loading state to disappear
+    await waitFor(() => expect(screen.queryByText('Loading...')).not.toBeInTheDocument());
+  });
+
+  it('displays the correct user information', async () => {
+    // Mock the API response
+    fetch.mockResponseOnce(JSON.stringify({ id: 1, name: 'Leanne Graham' }));
+
+    // Render the component
+    render(<App />);
+
+    // Wait for the user information to be displayed
+    await waitFor(() => expect(screen.getByText('Name: Leanne Graham')).toBeInTheDocument());
+  });
+});

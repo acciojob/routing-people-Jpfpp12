@@ -1,8 +1,8 @@
 
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import UserList from "./UserList";
-import UserDetails from "./UserDetails";
+import UserList from "./UserList.js";
+import UserDetails from "./UserDetails.js";
 
 const App = () => {
   return (
